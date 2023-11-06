@@ -197,10 +197,19 @@ if(ENABLE_SCRIPTING)
     lua/lutf8lib.c)
   target_compile_definitions(lua PUBLIC LUA_FLOORN2I=1)
   target_compile_definitions(lualib PRIVATE HAVE_SYSTEM)
+  
+  if(APPLE)
+    target_compile_definitions(lualib PRIVATE LUA_USE_MACOSX)
+  elseif(UNIX)
+    target_compile_definitions(lualib PRIVATE LUA_USE_LINUX)
+  endif()
+  
   target_include_directories(lua PUBLIC lua)
   target_include_directories(lauxlib PUBLIC lua)
   target_include_directories(lualib PUBLIC lua)
   target_link_libraries(lauxlib lua)
+  target_link_libraries(lualib ${CMAKE_DL_LIBS})
+
 
   # ixwebsocket
   if(ENABLE_WEBSOCKET)
